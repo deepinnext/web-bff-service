@@ -28,11 +28,11 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./src/Deepin.Messaging.API/Dockerfile
+          file: ./src/Deepin.WebBff.API/Dockerfile
           push: true
           tags: |
-            ${{ vars.DOCKER_USERNAME }}/message-service:latest
-            ${{ vars.DOCKER_USERNAME }}/message-service:${{ github.sha }}
+            ${{ vars.DOCKER_USERNAME }}/web-bff-service:latest
+            ${{ vars.DOCKER_USERNAME }}/web-bff-service:${{ github.sha }}
 
   update-deployment-repo:
     needs: docker-build-and-push
@@ -46,14 +46,14 @@ jobs:
 
       - name: Update deployment file and Push changes
         run: |
-          BRANCH_NAME=deployment/message-service/${{ github.sha }}
+          BRANCH_NAME=deployment/web-bff-service/${{ github.sha }}
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git checkout -b $BRANCH_NAME
-          sed --in-place 's|image: .*$|image: ${{ vars.DOCKER_USERNAME }}/message-service:${{ github.sha }}|' argocd/message-service/base/deployment.yaml
-          sed --in-place 's|newTag: .*$|newTag: ${{ github.sha }}|' argocd/message-service/nas/kustomization.yaml
+          sed --in-place 's|image: .*$|image: ${{ vars.DOCKER_USERNAME }}/web-bff-service:${{ github.sha }}|' argocd/web-bff-service/base/deployment.yaml
+          sed --in-place 's|newTag: .*$|newTag: ${{ github.sha }}|' argocd/web-bff-service/nas/kustomization.yaml
           git add .
-          git commit -m "Update message-service image tag to ${{ github.sha }}"
+          git commit -m "Update web-bff-service image tag to ${{ github.sha }}"
           git push origin $BRANCH_NAME
 
       - name: Create Pull Request
@@ -64,10 +64,10 @@ jobs:
             const { data: pullRequest } = await github.rest.pulls.create({
               owner: context.repo.owner,
               repo: '${{ vars.DEPLOYMENT_REPOSITORY }}',
-              title: 'Update message-service image tag to ${{ github.sha }}',
-              head: 'deployment/message-service/${{ github.sha }}',
+              title: 'Update web-bff-service image tag to ${{ github.sha }}',
+              head: 'deployment/web-bff-service/${{ github.sha }}',
               base: 'master',
-              body: 'This PR updates the message-service image tag to ${{ github.sha }}.',
+              body: 'This PR updates the web-bff-service image tag to ${{ github.sha }}.',
               draft: false,
               maintainer_can_modify: true
             });
@@ -75,6 +75,6 @@ jobs:
               owner: context.repo.owner,
               repo: '${{ vars.DEPLOYMENT_REPOSITORY }}',
               issue_number: pullRequest.number,
-              labels: ['deployment', 'message-service'],
+              labels: ['deployment', 'web-bff-service'],
             });
             core.setOutput('pull-request-number', pullRequest.number);

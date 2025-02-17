@@ -27,9 +27,29 @@ namespace Deepin.WebBff.API.Controllers
             var chats = await _chatService.GetChatsAsync();
             return Ok(chats);
         }
+        [HttpGet("{chatId}/messages/{messageId}")]
+        public async Task<ActionResult<IEnumerable<Message>>> GetMessage(Guid chatId, string messageId)
+        {
+            var chat = await _chatService.GetChatAsync(chatId);
+            if (chat == null)
+            {
+                return NotFound();
+            }
+            var message = await _messageService.GetMessageAsync(messageId);
+            if (message == null)
+            {
+                return NotFound();
+            }
+            return Ok(message);
+        }
         [HttpGet("{chatId}/messages")]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessages(Guid chatId, [FromQuery] MessageQuery query)
         {
+            var chat = await _chatService.GetChatAsync(chatId);
+            if (chat == null)
+            {
+                return NotFound();
+            }
             var messages = await _messageService.GetMessagesAsync(chatId, query);
             return Ok(messages);
         }

@@ -15,6 +15,7 @@ public class Chat
     public bool IsPublic { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public long UnreadCount { get; set; }
     public Message LastMessage { get; set; }
     public Message LastReadMessage { get; set; }
     public Chat()
@@ -36,6 +37,17 @@ public class Chat
             UserName = dto.GroupInfo.UserName;
             AvatarFileId = dto.GroupInfo.AvatarFileId;
             Description = dto.GroupInfo.Description;
+        }
+        if (lastMessage != null)
+        {
+            if (lastReadMessage == null)
+            {
+                UnreadCount = lastMessage.Sequence;
+            }
+            else if (lastMessage.Sequence > lastReadMessage.Sequence)
+            {
+                UnreadCount = lastMessage.Sequence - lastReadMessage.Sequence;
+            }
         }
     }
 }
