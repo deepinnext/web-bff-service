@@ -4,6 +4,7 @@ using Deepin.Infrastructure.Extensions;
 using Deepin.ServiceDefaults.Extensions;
 using Deepin.WebBff.API.ApiClients;
 using Deepin.WebBff.API.Configurations;
+using Deepin.WebBff.API.Services;
 
 namespace Deepin.WebBff.API.Extensions;
 
@@ -21,7 +22,8 @@ public static class HostExtensions
             ConnectionString = builder.Configuration.GetConnectionString("RedisConnection") ?? throw new ArgumentNullException("RedisConnection")
         })
         .AddDefaultUserContexts()
-        .AddApiClients();
+        .AddApiClients()
+        .AddApiServices();
 
         return builder;
     }
@@ -44,6 +46,14 @@ public static class HostExtensions
         services.AddHttpClient<IChatApiClient, ChatApiClient>().AddDefaultPolicies();
         services.AddHttpClient<IIdentityApiClient, IdentityApiClient>().AddDefaultPolicies();
         services.AddHttpClient<IMessageApiClient, MessageApiClient>().AddDefaultPolicies();
+        services.AddHttpClient<IPresenceApiClient, PresenceApiClient>().AddDefaultPolicies();
+        return services;
+    }
+    private static IServiceCollection AddApiServices(this IServiceCollection services)
+    {
+        services.AddScoped<IChatService, ChatService>();
+        services.AddScoped<IMessageService, MessageService>();
+        services.AddScoped<IIdentityService, IdentityService>();
         return services;
     }
 }

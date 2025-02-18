@@ -1,3 +1,4 @@
+using Deepin.Application.Pagination;
 using Deepin.Domain;
 using Deepin.Infrastructure.Helpers;
 using Deepin.WebBff.API.ApiClients;
@@ -63,5 +64,20 @@ public class ChatService(
             chat.Name = userProfile.DisplayName;
         }
         return chat;
+    }
+    public async Task<IPagination<ChatMember>> GetChatMemberAsync(Guid chatId, int offset = 0, int limit = 20)
+    {
+        var pagedMembers = await _chatApiClient.GetChatMembersAsync(chatId, offset, limit);
+        if (!pagedMembers.Items.Any())
+        {
+            return new Pagination<ChatMember>([], 0, 0, 0);
+        }
+        var userIds = pagedMembers.Items.Select(x => x.UserId).ToArray();
+        var userProfiles = await _identityService.GetUsersAsync(userIds);
+        return new Pagination<ChatMember>(pagedMembers.Items.Select(x =>
+        {
+            var userProfile = userProfiles.FirstOrDefault(u => u.Id == x.UserId);
+            return new ChatMember(x, userProfile);
+        }), pagedMembers.TotalCount, pagedMembers.Offset, pagedMembers.Limit);
     }
 }

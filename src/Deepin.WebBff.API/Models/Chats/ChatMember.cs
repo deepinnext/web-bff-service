@@ -12,4 +12,14 @@ public class ChatMember
     public ChatMemberRole Role { get; set; }
     public string UserId { get; set; }
     public UserProfile Profile { get; set; }
+    public ChatMember() { }
+    public ChatMember(ChatMemberDto dto, UserProfile profile)
+    {
+        DisplayName = dto.DisplayName;
+        JoinedAt = dto.JoinedAt;
+        UpdatedAt = dto.UpdatedAt;
+        Role = dto.Role;
+        UserId = dto.UserId;
+        Profile = profile;
+    }
 }

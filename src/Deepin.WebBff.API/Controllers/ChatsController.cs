@@ -1,3 +1,4 @@
+using Deepin.Application.Pagination;
 using Deepin.WebBff.API.ApiClients;
 using Deepin.WebBff.API.Models.Chats;
 using Deepin.WebBff.API.Models.Messages;
@@ -52,6 +53,17 @@ namespace Deepin.WebBff.API.Controllers
             }
             var messages = await _messageService.GetMessagesAsync(chatId, query);
             return Ok(messages);
+        }
+        [HttpGet("{chatId}/members")]
+        public async Task<ActionResult<IPagination<ChatMember>>> GetMembers(Guid chatId, int offset = 0, int limit = 20)
+        {
+            var chat = await _chatService.GetChatAsync(chatId);
+            if (chat == null)
+            {
+                return NotFound();
+            }
+            var members = await _chatService.GetChatMemberAsync(chatId, offset, limit);
+            return Ok(members);
         }
     }
 }
