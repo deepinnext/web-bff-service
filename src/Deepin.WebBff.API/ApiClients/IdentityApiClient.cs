@@ -7,7 +7,7 @@ public class IdentityApiClient(ILogger<IdentityApiClient> logger, IOptions<UrlsC
 : HttpClientBase(logger, httpClient), IIdentityApiClient
 {
     private readonly UrlsConfig _urlsConfig = options.Value;
-    protected override string BaseUrl => _urlsConfig.IdentityUrl;
+    protected override string BaseUrl => _urlsConfig.Identity;
 
     public async Task<UserProfileDto> GetUserAsync(string userId)
     {
@@ -28,6 +28,8 @@ public class UserProfileDto
     public string Id { get; set; }
     public string UserName { get; set; }
     public string DisplayName { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
     public string Email { get; set; }
     public string AvatarFileId { get; set; }
     public DateTime CreatedAt { get; set; }

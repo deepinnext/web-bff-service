@@ -1,4 +1,3 @@
-using System;
 using Deepin.WebBff.API.ApiClients;
 using Deepin.WebBff.API.Models.Identity;
 

@@ -1,4 +1,4 @@
-using Deepin.Application.Pagination;
+using Deepin.Infrastructure.Pagination;
 using Deepin.WebBff.API.Configurations;
 using Microsoft.Extensions.Options;
 
@@ -8,7 +8,7 @@ public class ChatApiClient(ILogger<ChatApiClient> logger, IOptions<UrlsConfig> o
 : HttpClientBase(logger, httpClient), IChatApiClient
 {
     private readonly UrlsConfig _urlsConfig = options.Value;
-    protected override string BaseUrl => _urlsConfig.ChatUrl;
+    protected override string BaseUrl => _urlsConfig.Chat;
     public async Task<ChatDto> GetChatAsync(Guid chatId)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/chats/{chatId}");

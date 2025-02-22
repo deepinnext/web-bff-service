@@ -1,4 +1,4 @@
-using Deepin.Application.Pagination;
+using Deepin.Infrastructure.Pagination;
 using Deepin.WebBff.API.Configurations;
 using Microsoft.Extensions.Options;
 
@@ -8,7 +8,7 @@ public class MessageApiClient(ILogger<MessageApiClient> logger, IOptions<UrlsCon
 : HttpClientBase(logger, httpClient), IMessageApiClient
 {
     private readonly UrlsConfig _urlsConfig = options.Value;
-    protected override string BaseUrl => _urlsConfig.MessageUrl;
+    protected override string BaseUrl => _urlsConfig.Message;
     public async Task<MessageDto> GetMessageByIdAsync(string id)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/messages/{id}");

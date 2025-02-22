@@ -1,13 +1,14 @@
 using Deepin.Domain;
 using Deepin.WebBff.API.Models.Identity;
 using Deepin.WebBff.API.Services;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Deepin.WebBff.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController(
         IIdentityService identityService,
         IUserContext userContext) : ControllerBase

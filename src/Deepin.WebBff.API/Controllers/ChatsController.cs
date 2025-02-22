@@ -1,5 +1,4 @@
-using Deepin.Application.Pagination;
-using Deepin.WebBff.API.ApiClients;
+using Deepin.Infrastructure.Pagination;
 using Deepin.WebBff.API.Models.Chats;
 using Deepin.WebBff.API.Models.Messages;
 using Deepin.WebBff.API.Services;

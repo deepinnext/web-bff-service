@@ -1,4 +1,4 @@
-using Deepin.Application.Pagination;
+using Deepin.Infrastructure.Pagination;
 using Deepin.WebBff.API.Models.Messages;
 
 namespace Deepin.WebBff.API.Services;
