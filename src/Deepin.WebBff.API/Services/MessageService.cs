@@ -1,3 +1,4 @@
+using Deepin.Domain;
 using Deepin.Infrastructure.Pagination;
 using Deepin.WebBff.API.ApiClients;
 using Deepin.WebBff.API.Models.Messages;
@@ -5,9 +6,11 @@ using Deepin.WebBff.API.Models.Messages;
 namespace Deepin.WebBff.API.Services;
 
 public class MessageService(
+    IUserContext userContext,
     IMessageApiClient messageApiClient,
     IIdentityService identityService) : IMessageService
 {
+    private readonly IUserContext _userContext = userContext;
     private readonly IMessageApiClient _messageApiClient = messageApiClient;
     private readonly IIdentityService _identityService = identityService;
 
@@ -38,7 +41,7 @@ public class MessageService(
             return null;
         }
         var fromUser = await _identityService.GetUserAsync(messageDto.From);
-        return new Message(messageDto, fromUser);
+        return new Message(messageDto, fromUser, _userContext.UserId);
     }
 
     public async Task<IEnumerable<Message>> GetMessagesAsync(string[] messageIds)
