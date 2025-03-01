@@ -7,13 +7,17 @@ public class Message
 {
     public string Id { get; set; }
     public Guid ChatId { get; set; }
-    public long CreatedAt { get; set; }
-    public long ModifiedAt { get; set; }
+    public bool IsEdited { get; set; }
+    public bool IsDeleted { get; set; }
+    public bool IsRead { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? ModifiedAt { get; set; }
     public string Content { get; set; }
     public string ReplyTo { get; set; }
     public long Sequence { get; set; }
     public UserProfile From { get; set; }
-    public Message(MessageDto message, UserProfile from)
+    public bool IsMyMessage { get; set; }
+    public Message(MessageDto message, UserProfile from, string currentUserId = null)
     {
         Id = message.Id;
         ChatId = message.ChatId;
@@ -23,5 +27,12 @@ public class Message
         ReplyTo = message.ReplyTo;
         Sequence = message.Sequence;
         From = from;
+        IsEdited = message.IsEdited;
+        IsDeleted = message.IsDeleted;
+        IsRead = message.IsRead;
+        if (currentUserId != null)
+        {
+            IsMyMessage = message.From == currentUserId;
+        }
     }
 }

@@ -7,6 +7,8 @@ public class MessageQuery : PageQuery
 {
     public string Keywords { get; set; }
     public string From { get; set; }
+    public MessageQueryDirection Direction { get; set; }
+    public long AnchorSequence { get; set; }
     public MessageQueryDto ToDto(Guid chatId)
     {
         return new MessageQueryDto
@@ -15,7 +17,9 @@ public class MessageQuery : PageQuery
             Keywords = Keywords,
             From = From,
             Limit = Limit,
-            Offset = Offset
+            Offset = Offset,
+            AnchorSequence = AnchorSequence,
+            Direction = Direction
         };
     }
 }

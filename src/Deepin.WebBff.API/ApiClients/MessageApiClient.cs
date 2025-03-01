@@ -39,20 +39,29 @@ public class MessageApiClient(ILogger<MessageApiClient> logger, IOptions<UrlsCon
 public class MessageDto
 {
     public string Id { get; set; }
-    public Guid ChatId { get; set; }
     public string From { get; set; }
-    public long CreatedAt { get; set; }
-    public long ModifiedAt { get; set; }
+    public bool IsEdited { get; set; }
+    public bool IsDeleted { get; set; }
+    public bool IsRead { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? ModifiedAt { get; set; }
+    public long Sequence { get; set; }
+    public Guid ChatId { get; set; }
     public string Content { get; set; }
     public string ReplyTo { get; set; }
-    public long Sequence { get; set; }
+}
+public enum MessageQueryDirection
+{
+    Backward,
+    Forward
 }
 public class MessageQueryDto : PageQuery
 {
     public Guid ChatId { get; set; }
     public string Keywords { get; set; }
     public string From { get; set; }
-
+    public long AnchorSequence { get; set; }
+    public MessageQueryDirection? Direction { get; set; }
     internal string ToQueryString()
     {
         var query = new List<string>
@@ -68,6 +77,14 @@ public class MessageQueryDto : PageQuery
         if (!string.IsNullOrWhiteSpace(From))
         {
             query.Add($"from={From}");
+        }
+        if (AnchorSequence > 0)
+        {
+            query.Add($"anchorSequence={AnchorSequence}");
+        }
+        if (Direction.HasValue)
+        {
+            query.Add($"direction={Direction.Value.ToString().ToLower()}");
         }
 
         return string.Join("&", query);
