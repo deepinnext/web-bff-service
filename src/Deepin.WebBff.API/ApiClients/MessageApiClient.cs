@@ -24,7 +24,7 @@ public class MessageApiClient(ILogger<MessageApiClient> logger, IOptions<UrlsCon
     public async Task<IPagination<MessageDto>> GetMessagesAsync(MessageQueryDto query)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/messages?{query.ToQueryString()}");
-        var response = await SendAsync<IPagination<MessageDto>>(request);
+        var response = await SendAsync<Pagination<MessageDto>>(request);
         return response;
     }
 

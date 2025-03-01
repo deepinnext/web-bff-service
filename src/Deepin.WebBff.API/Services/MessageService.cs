@@ -75,7 +75,7 @@ public class MessageService(
             messages.Items.Select(m =>
             {
                 var fromUser = fromUsers.FirstOrDefault(u => u.Id == m.From);
-                return new Message(m, fromUser);
+                return new Message(m, fromUser, _userContext.UserId);
             }),
             messages.Offset,
             messages.Limit,

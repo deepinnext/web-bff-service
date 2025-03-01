@@ -16,7 +16,7 @@ public class PresenceApiClient(ILogger<PresenceApiClient> logger, IOptions<UrlsC
     }
     public async Task<IEnumerable<UserPresenceDto>> GetPresencesAsync(string[] userIds)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/presences/batch?ids={string.Join(",", userIds)}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/presences/batch?userIds={string.Join(",", userIds)}");
         var response = await SendAsync<IEnumerable<UserPresenceDto>>(request);
         return response;
     }
