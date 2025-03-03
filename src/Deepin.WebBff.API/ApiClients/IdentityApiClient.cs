@@ -18,7 +18,8 @@ public class IdentityApiClient(ILogger<IdentityApiClient> logger, IOptions<UrlsC
 
     public async Task<IEnumerable<UserProfileDto>> GetUsersAsync(string[] userIds)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/users/batch?ids={string.Join(",", userIds)}");
+        var queryStrings = string.Join("&", userIds.Select(x => $"ids={x}"));
+        var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/users/batch?{queryStrings}");
         var response = await SendAsync<IEnumerable<UserProfileDto>>(request);
         return response;
     }
